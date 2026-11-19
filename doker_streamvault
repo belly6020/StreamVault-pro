@@ -1,0 +1,24 @@
+services:
+  streamvault:
+    image: debian:bookworm-slim
+    container_name: streamvault
+    network_mode: host
+    working_dir: /app
+    environment:
+      - DISPLAY=${DISPLAY}
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
+    configs:
+      - source: streamvault_main
+        target: /app/main.py
+    command: >
+      sh -c "apt-get update &&
+             apt-get install -y --no-install-recommends python3 python3-tk python3-vlc vlc &&
+             python3 /app/main.py"
+    restart: unless-stopped
+
+configs:
+  streamvault_main:
+    content: |
+      # Paste the full main.py content from app.yml here
+      # (the same code as the files.main.py block above)
